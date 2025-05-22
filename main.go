@@ -60,17 +60,21 @@ func parsePartialDate(s string, location *time.Location) (int64, error) {
 
 // parses inputs then returns unix timestamp in second
 func normalize() (int64, error) {
-	if *in == "" {
-		return time.Now().Unix(), nil
-	}
 	if *unix != 0 {
+		fmt.Println("Parsing as unix...")
 		return int64(*unix), nil
 	}
 	if *unixMilli != 0 {
+		fmt.Println("Parsing as unixMilli...")
 		return int64(*unixMilli) / 1000, nil
 	}
 	if *unixMicro != 0 {
+		fmt.Println("Parsing as unixMicro...")
 		return int64(*unixMicro) / 1000000, nil
+	}
+	if *in == "" {
+		fmt.Println("Empty input...")
+		return time.Now().Unix(), nil
 	}
 	// Parse datetime from given string
 	location, err := getLocationFromAbbreviation(*timezone)
@@ -97,8 +101,12 @@ func buildOutput(unixTimestamp int64) (string, error) {
 	if err != nil {
 		return "", err
 	}
+	ist, err := time.LoadLocation("Asia/Kolkata")
+	if err != nil {
+		return "", err
+	}
 	t := time.Unix(unixTimestamp, 0)
-	res := fmt.Sprintf("Normalized: %d\n%s\n%s\n%s\n", unixTimestamp, t.In(utc), t.In(jst), t.In(pt))
+	res := fmt.Sprintf("Normalized: %d\n%s\n%s\n%s\n%s\n", unixTimestamp, t.In(utc), t.In(jst), t.In(pt), t.In(ist))
 	return res, nil
 }
 
