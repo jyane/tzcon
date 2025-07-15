@@ -89,6 +89,7 @@ func normalize() (int64, error) {
 }
 
 func buildOutput(unixTimestamp int64) (string, error) {
+	f := "2006-01-02 15:04:05 MST"
 	utc, err := time.LoadLocation("UTC")
 	if err != nil {
 		return "", err
@@ -106,7 +107,14 @@ func buildOutput(unixTimestamp int64) (string, error) {
 		return "", err
 	}
 	t := time.Unix(unixTimestamp, 0)
-	res := fmt.Sprintf("Normalized: %d\n%s\n%s\n%s\n%s\n", unixTimestamp, t.In(utc), t.In(jst), t.In(pt), t.In(ist))
+	res := fmt.Sprintf(
+		"Normalized: %d\n%s\n%s\n%s\n%s\n",
+		unixTimestamp,
+		t.In(utc).Format(f),
+		t.In(jst).Format(f),
+		t.In(pt).Format(f),
+		t.In(ist).Format(f),
+	)
 	return res, nil
 }
 

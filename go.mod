@@ -1,3 +1,3 @@
 module github.com/jyane/tzcon
 
-go 1.25
+go 1.24
